@@ -1,0 +1,31 @@
+services:
+    meedi_video.display_video_extension:
+        class: meedi\VideoBundle\Twig\DisplayVideo
+        arguments: [@meedi_video.video_manager]
+        tags:
+            -  { name: twig.extension }
+            
+    meedi_video.video_manager:
+        class: meedi\VideoBundle\Component\VideoManager
+
+    meedi_video.validator.video_url:
+        class: Iamballer\VideoBundle\Validator\Constraints\VideoUrlValidator
+        arguments: [@meedi_video.video_manager]
+        tags:
+            - { name: validator.constraint_validator, alias: video_url.validator }
+            
+    meedi_video.youtube:
+        class: meedi\VideoBundle\Providers\Youtube
+        tags:
+            - { name: meedi_video.provider, alias: youtube }
+            
+    meedi_video.form.type.video_url:
+        class: meedi\VideoBundle\Form\Type\VideoUrlType
+        arguments: [@meedi_video.video_manager]
+        tags:
+            - { name: form.type, alias: meedi_video_url }
+    meedi.video_entity.listener:
+        class: meedi\VideoBundle\Entity\Listener\VideoListener
+        arguments:  [@meedi_video.video_manager]
+        tags:
+           - { name: doctrine.event_listener, event: postLoad }
