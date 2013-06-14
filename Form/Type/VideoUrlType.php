@@ -26,7 +26,7 @@ class VideoUrlType extends AbstractType
   public function buildForm(FormBuilderInterface $builder, array $options)
   {
       $transformer = new VideoToUrlTransformer($this->om, $options['class']);
-      $builder->appendModelTransformer($transformer);
+      $builder->addModelTransformer($transformer);
   }
 
   public function setDefaultOptions(OptionsResolverInterface $resolver)
